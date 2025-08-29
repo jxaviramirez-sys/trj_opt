@@ -20,74 +20,58 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # If you later add packaging (pyproject.toml/setup.py) you can do:
+          # pip install -e .
 
-      # Make the repo importable (root + likely inner package root)
+      # Make the repo importable even if it's not packaged
       - name: Add paths to PYTHONPATH
         run: |
           echo "PYTHONPATH=$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/trj_opt_ultimate" >> $GITHUB_ENV
-          echo "Added to PYTHONPATH: $GITHUB_WORKSPACE and $GITHUB_WORKSPACE/trj_opt_ultimate"
+          echo "Added PYTHONPATH=$GITHUB_WORKSPACE:$GITHUB_WORKSPACE/trj_opt_ultimate"
 
-      # Find a cli.py and build its module path (e.g., trj_opt.cli or trj_opt_ultimate.trj_opt.cli)
-      - name: Locate CLI module dynamically
-        id: findcli
-        shell: bash
+      # Detect which module path exposes your CLI (no heredocs, just Bash)
+      - name: Detect CLI module
         run: |
           set -e
-          CLI_FILE=$(python - <<'PY'
-import os, sys
-cands=[]
-for root, dirs, files in os.walk('.'):
-    # skip junk dirs
-    if any(part in root for part in ('.git', '.venv', 'venv', '.mypy_cache', '.pytest_cache')):
-        continue
-    if 'cli.py' in files:
-        cands.append(root)
-# Prefer a path that ends with /trj_opt if present
-cands = sorted(cands, key=lambda p: (not p.endswith('/trj_opt') and not p.endswith('\\trj_opt'), len(p)))
-if not cands:
-    sys.exit(1)
-print(cands[0])
-PY
-)
-          echo "Found cli.py in: $CLI_FILE"
-          # Turn './trj_opt_ultimate/trj_opt' into 'trj_opt_ultimate.trj_opt.cli'
-          MOD="${CLI_FILE#./}"
-          MOD="${MOD%/}"
-          MOD="${MOD//\//.}.cli"
-          echo "MODULE=$MOD" >> $GITHUB_ENV
-          echo "Detected MODULE=$MOD"
-
-      - name: Show resolved module + sys.path
-        run: |
-          echo "MODULE=$MODULE"
-          python - <<'PY'
-import os, sys
-print('PYTHONPATH=', os.environ.get('PYTHONPATH'))
-print('sys.path[:5]=', sys.path[:5])
-PY
+          MODULE=""
+          if python -c "import trj_opt as _"; then
+            if python -m trj_opt.cli --help >/dev/null 2>&1; then MODULE="trj_opt.cli"; fi
+          fi
+          if [ -z "$MODULE" ] && python -c "import trj_opt_ultimate as _"; then
+            if python -m trj_opt_ultimate.cli --help >/dev/null 2>&1; then MODULE="trj_opt_ultimate.cli"; fi
+          fi
+          if [ -z "$MODULE" ]; then
+            # common nested layout: trj_opt_ultimate/trj_opt/cli.py
+            if python -m trj_opt_ultimate.trj_opt.cli --help >/dev/null 2>&1; then MODULE="trj_opt_ultimate.trj_opt.cli"; fi
+          fi
+          if [ -z "$MODULE" ]; then
+            echo "Could not find a CLI module (trj_opt.cli, trj_opt_ultimate.cli, or trj_opt_ultimate.trj_opt.cli)."
+            echo "Check where your cli.py lives and that it’s importable."
+            exit 1
+          fi
+          echo "MODULE=$MODULE" >> $GITHUB_ENV
+          echo "Detected MODULE=$MODULE"
 
       - name: Sanity check CLI
         run: |
-          python -m $MODULE --help || (echo "CLI help failed—verify cli.py actually defines a CLI"; exit 1)
+          echo "Using MODULE=$MODULE"
+          python -m $MODULE --help
 
       - name: Run demo (built-in if available)
         run: |
+          set -e
           mkdir -p trj_opt_out
           if python -m $MODULE demo; then
             echo "Ran built-in demo."
           else
             echo "No 'demo' subcommand — running minimal pipeline."
-
             # Prefer examples/ if present; fallback to repo root
-            TE="examples/run_demo_T.csv"; [ -f "$TE" ] || TE="run_demo_T.csv"
+            TE="examples/run_demo_T.csv";  [ -f "$TE" ]  || TE="run_demo_T.csv"
             DIT="examples/run_demo_Dit.csv"; [ -f "$DIT" ] || DIT="run_demo_Dit.csv"
-
-            # Try common subcommands
-            set -e
+            # Compute core metrics
             python -m $MODULE compute-rhoc --te_csv "$TE"  --out_json trj_opt_out/rho_c.json
             python -m $MODULE compute-srh  --dit_csv "$DIT" --out_json trj_opt_out/srh.json
-
-            # Optional steps (ignore failure if analyzed CSV isn’t produced)
+            # Optional steps (ignore failure if analyzed CSV isn’t produced by your commands)
             python -m $MODULE plot-pareto --analyzed_csv trj_opt_out/doe_plan_analyzed.csv --out_dir trj_opt_out || true
             python -m $MODULE report      --analyzed_csv trj_opt_out/doe_plan_analyzed.csv --out_dir trj_opt_out || true
           fi
