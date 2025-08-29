@@ -1,11 +1,6 @@
-# trj_opt (reconstructed)
-
-_This README was chosen as the most complete from multiple partial versions and lightly normalized._
-
-
 # trj_opt — Perovskite–Si Interface Optimizer
 
-**Purpose:** A turnkey, theory-led toolkit to optimize the perovskite/Si recombination junction (TRJ) for tandem solar cells.
+**Purpose:** A theory-led toolkit to optimize the perovskite/Si recombination junction (TRJ) for tandem solar cells.
 It ingests NEGF **transmission** (`T(E)`) and **interface DOS** to compute the **specific contact resistivity** (ρc),
 **interface recombination metrics** (S_eff, J0_interface), and **ΔVoc_interface**, then ranks candidates, checks robustness,
 and generates a report with Pareto plots. Use it to convert quantum-transport & DFT outputs into a **fabrication-ready recipe**.
