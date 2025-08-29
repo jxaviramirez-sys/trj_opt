@@ -1,14 +1,14 @@
-# trj_opt (reconstructed)
-
-_This README was chosen as the most complete from multiple partial versions and lightly normalized._
-
-
 # trj_opt — Perovskite–Si Interface Optimizer
 
-**Purpose:** A turnkey, theory-led toolkit to optimize the perovskite/Si recombination junction (TRJ) for tandem solar cells.
+**Purpose:** A theory-led toolkit to optimize the perovskite/Si recombination junction (TRJ) for tandem solar cells.
 It ingests NEGF **transmission** (`T(E)`) and **interface DOS** to compute the **specific contact resistivity** (ρc),
 **interface recombination metrics** (S_eff, J0_interface), and **ΔVoc_interface**, then ranks candidates, checks robustness,
 and generates a report with Pareto plots. Use it to convert quantum-transport & DFT outputs into a **fabrication-ready recipe**.
+
+## Try the demo (no setup)
+1. Go to the **Actions** tab (top of the repo).
+2. Click the latest **demo** run.
+3. Scroll to **Artifacts** and download `demo-outputs` (contains Pareto and report).
 
 ## Quickstart (local)
 
@@ -40,8 +40,8 @@ python -m trj_opt.cli report --analyzed_csv trj_opt_out/doe_plan_analyzed.csv --
 - `demo`          — Runs a mini pipeline on included example files
 
 ## License
-MIT
-
+This software is released under the GNU Affero General Public License v3.0 (AGPLv3) for academic and research purposes.  
+Commercial use requires a separate license. Please contact jxaviramirez@gmail.com for inquiries.
 
 ## Updates
 - Landauer linear-response ρc per area with metadata-aware normalization (A_cell_A2 / area_m2).
@@ -64,3 +64,4 @@ Outputs JSON with ρ_c, J0_int, ΔV_oc and the **lower bound** on ρ_c·J0_int:
 \[
 \rho_c J_{0,\mathrm{int}} \ge (kT/q)\, \frac{4\Gamma_\min^2}{(\Gamma-2\Gamma_\min)^2}.
 \]
+
