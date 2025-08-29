@@ -16,11 +16,18 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies (if any)
+        - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          # Core scientific stack your CLI imports/likely uses:
+          pip install \
+            numpy>=1.24 \
+            pandas>=2.0 \
+            matplotlib>=3.8 \
+            scipy>=1.11 \
+            reportlab>=4.0
+          # If you later add requirements.txt, this line will install from it:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          # If you later add pyproject.toml/setup.py you can switch to: pip install -e .
 
       # Make your src layout importable: trj_opt_ultimate/src/trj_opt/cli.py => module "trj_opt"
       - name: Add src to PYTHONPATH
