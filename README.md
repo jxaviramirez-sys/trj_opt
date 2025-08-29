@@ -35,7 +35,8 @@ python -m trj_opt.cli report --analyzed_csv trj_opt_out/doe_plan_analyzed.csv --
 - `demo`          — Runs a mini pipeline on included example files
 
 ## License
-MIT
+AGPL-3.0-only. For commercial use, please contact jxaviramirez@gmail.com.
+
 
 
 ## Updates
