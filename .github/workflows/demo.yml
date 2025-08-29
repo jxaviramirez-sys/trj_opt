@@ -1,0 +1,49 @@
+name: demo
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  run-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install package (editable) and deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # If your code is in a package folder (e.g., trj_opt), install it:
+          if [ -f setup.py ] || [ -f pyproject.toml ]; then pip install -e .; fi
+          # Otherwise, add repo root to PYTHONPATH for module imports:
+          echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+
+      - name: Run demo
+        run: |
+          python -m trj_opt.cli --help
+          # Prefer the single-step demo if implemented:
+          if python -m trj_opt.cli demo; then
+            echo "Ran built-in demo."
+          else
+            echo "Falling back to scripts/run_demo.py"
+            python scripts/run_demo.py
+          fi
+
+      - name: Upload demo outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-outputs
+          path: |
+            trj_opt_out/
+            outputs/
+            **/*.png
+            **/*.pdf
+            **/*.json
+          if-no-files-found: warn
