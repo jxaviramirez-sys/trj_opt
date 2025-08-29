@@ -1,6 +1,3 @@
-# Reconstructed by merge of 7 variants for trj_opt/cli.py
-# Strategy: union of imports, union of classes/functions with longest/most-params preference.
-
 import argparse, os, pandas as pd, numpy as np
 from . import landauer, srh
 from .io import read_te_csv, read_dit_csv
