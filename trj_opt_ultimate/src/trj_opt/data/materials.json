@@ -1,0 +1,20 @@
+{
+  "Si": {
+    "Eg_eV": 1.12,
+    "ni_cm3_at_300K": 10000000000.0,
+    "Nc_cm3": 2.8e+19,
+    "Nv_cm3": 1.04e+19,
+    "sigma_n_cm2": 1e-15,
+    "sigma_p_cm2": 1e-15,
+    "v_th_cm_s_at_300K": 10000000.0
+  },
+  "Perovskite_FA_MA_I_Br": {
+    "Eg_eV": 1.58,
+    "ni_cm3_at_300K": 100000.0,
+    "Nc_cm3": 2e+18,
+    "Nv_cm3": 2e+18,
+    "sigma_n_cm2": 1e-15,
+    "sigma_p_cm2": 1e-15,
+    "v_th_cm_s_at_300K": 10000000.0
+  }
+}
