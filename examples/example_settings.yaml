@@ -1,0 +1,17 @@
+# Example calibration/config knobs for TRJ Opt
+fudge_rho_c: 1.0             # multiply model ρc (Ohm·cm²)
+fudge_J0_interface: 1.0      # multiply model J0_interface (A/cm²)
+anchor_rho_c_Ohm_cm2:        # e.g., 1e-3 to match measured ρc
+anchor_lifetime_us:          # optional: measured lifetime (μs), surfaced but not auto-mapped
+sheet_resistance_ohm_sq:     # optional: measured sheet resistance (Ω/□)
+
+# Key physical parameters (optional overrides)
+ni_cm3:                      # intrinsic carriers
+sigma_n_cm2:
+sigma_p_cm2:
+v_th_cm_s:
+NA_cm3:
+ND_cm3:
+
+# Pareto overlay
+measured_points_csv:         # path to CSV with columns: rho_c_mOhm_cm2, DeltaVoc_interface_mV[, label]
