@@ -37,8 +37,8 @@ jobs:
 import os, sys
 cands=[]
 for root, dirs, files in os.walk('.'):
-    # skip .git and venvs
-    if any(part in root for part in ('.git', '.venv', 'venv', '.mypy_cache', '.pytest_cache')): 
+    # skip junk dirs
+    if any(part in root for part in ('.git', '.venv', 'venv', '.mypy_cache', '.pytest_cache')):
         continue
     if 'cli.py' in files:
         cands.append(root)
@@ -82,7 +82,7 @@ PY
             TE="examples/run_demo_T.csv"; [ -f "$TE" ] || TE="run_demo_T.csv"
             DIT="examples/run_demo_Dit.csv"; [ -f "$DIT" ] || DIT="run_demo_Dit.csv"
 
-            # Try common subcommands from your README
+            # Try common subcommands
             set -e
             python -m $MODULE compute-rhoc --te_csv "$TE"  --out_json trj_opt_out/rho_c.json
             python -m $MODULE compute-srh  --dit_csv "$DIT" --out_json trj_opt_out/srh.json
