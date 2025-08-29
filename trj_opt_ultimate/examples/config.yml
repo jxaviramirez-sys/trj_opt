@@ -1,6 +1,0 @@
-# Example config template (optional future use)
-temperature_K: 300
-area_cm2: 0.01
-NA_cm3: 1e17
-ND_cm3: 1e17
-J0_rad_A_cm2: 1e-15

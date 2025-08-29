@@ -1,4 +1,0 @@
-run_id,t_ITO_nm,V_O_cm^-3,interlayer,anneal_C,perovskite_termination,surface_texture,J0_interface_A_cm2,rho_c_mOhm_cm2,S_interface_cm_s,DeltaVoc_interface_mV,T_EF,notes
-1,1.7,5e+20,LiF0.3_DAI0.8,120,FAI_rich,flat,,,,,,
-2,1.4,1e+20,None,120,FAI_rich,flat,,,,,,
-3,2.0,1e+21,MgFx_0.5nm,80,PbI2_rich,lightly_textured,,,,,,

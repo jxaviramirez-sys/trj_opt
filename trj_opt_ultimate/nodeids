@@ -1,4 +1,0 @@
-[
-  "tests/test_landauer.py::test_rho_monotonic_with_T",
-  "tests/test_srh.py::test_interface_dvoc_limits"
-]
