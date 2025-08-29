@@ -60,3 +60,8 @@ Outputs JSON with ρ_c, J0_int, ΔV_oc and the **lower bound** on ρ_c·J0_int:
 \[
 \rho_c J_{0,\mathrm{int}} \ge (kT/q)\, \frac{4\Gamma_\min^2}{(\Gamma-2\Gamma_\min)^2}.
 \]
+
+## Try the demo (no setup)
+1. Go to the **Actions** tab (top of the repo).
+2. Click the latest **demo** run.
+3. Scroll to **Artifacts** and download `demo-outputs` (contains Pareto and report).
